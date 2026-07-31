@@ -186,6 +186,7 @@ export function GameProvider({
 
   const channelRef = useRef<RoomChannel | null>(null);
   const subscribedRef = useRef(false);
+  const applyWordRef = useRef<((p: WordPayload) => void) | null>(null);
   const stateRef = useRef<StatePayload | null>(null);
   const clockOffsetRef = useRef(0); // host_time - my_time
   const lastHeartbeatRef = useRef(0);
@@ -330,8 +331,7 @@ export function GameProvider({
       maybeResetForNewGame(payload);
     });
 
-    channel.on("broadcast", { event: "word" }, (msg) => {
-      const p = msg.payload as WordPayload;
+    const applyWord = (p: WordPayload) => {
       const cur = stateRef.current;
       // Ignore stale broadcasts from a different round.
       if (cur && p.round !== cur.round) return;
@@ -420,7 +420,11 @@ export function GameProvider({
           mine: p.id === meRef.current.id,
         },
       ]);
-    });
+    };
+    applyWordRef.current = applyWord;
+    channel.on("broadcast", { event: "word" }, (msg) =>
+      applyWord(msg.payload as WordPayload),
+    );
 
     channel.subscribe((sbStatus) => {
       if (sbStatus === "SUBSCRIBED") {
@@ -799,6 +803,7 @@ export function GameProvider({
           elapsedMs,
           claimedAt: hostNow,
         };
+        applyWordRef.current?.(payload);
         channelRef.current?.send({ type: "broadcast", event: "word", payload });
 
         return { ok: true, points };
