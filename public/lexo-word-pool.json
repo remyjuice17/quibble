@@ -1,0 +1,1399 @@
+{
+  "source": "SCOWL<=60",
+  "generated": "2026-07-17",
+  "count": 174,
+  "words": [
+    {
+      "word": "JOURNALIST",
+      "letters": 10,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 283,
+      "playabilityScore": 96
+    },
+    {
+      "word": "RELATIONS",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 473,
+      "playabilityScore": 94
+    },
+    {
+      "word": "SIGNATURE",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 415,
+      "playabilityScore": 94
+    },
+    {
+      "word": "ORGANISED",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 401,
+      "playabilityScore": 94
+    },
+    {
+      "word": "INTRODUCE",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 249,
+      "playabilityScore": 94
+    },
+    {
+      "word": "EDUCATION",
+      "letters": 9,
+      "vowels": 5,
+      "difficulty": "Easy",
+      "validSubwords": 184,
+      "playabilityScore": 94
+    },
+    {
+      "word": "DIRECTIONS",
+      "letters": 10,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 426,
+      "playabilityScore": 93
+    },
+    {
+      "word": "ORGANISE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 183,
+      "playabilityScore": 92
+    },
+    {
+      "word": "SCENARIO",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 168,
+      "playabilityScore": 92
+    },
+    {
+      "word": "SUITABLE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 166,
+      "playabilityScore": 92
+    },
+    {
+      "word": "REACTION",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 164,
+      "playabilityScore": 92
+    },
+    {
+      "word": "TORNADOES",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 306,
+      "playabilityScore": 91
+    },
+    {
+      "word": "GENERATION",
+      "letters": 10,
+      "vowels": 5,
+      "difficulty": "Easy",
+      "validSubwords": 252,
+      "playabilityScore": 91
+    },
+    {
+      "word": "REASONING",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 216,
+      "playabilityScore": 91
+    },
+    {
+      "word": "OPERATION",
+      "letters": 9,
+      "vowels": 5,
+      "difficulty": "Easy",
+      "validSubwords": 199,
+      "playabilityScore": 91
+    },
+    {
+      "word": "DIRECTION",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 166,
+      "playabilityScore": 91
+    },
+    {
+      "word": "ADVENTURE",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 162,
+      "playabilityScore": 91
+    },
+    {
+      "word": "VOLCANOES",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 161,
+      "playabilityScore": 91
+    },
+    {
+      "word": "HISTORIAN",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 152,
+      "playabilityScore": 91
+    },
+    {
+      "word": "QUESTIONS",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 148,
+      "playabilityScore": 91
+    },
+    {
+      "word": "PAINTERS",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 327,
+      "playabilityScore": 90
+    },
+    {
+      "word": "PERSONAL",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 218,
+      "playabilityScore": 90
+    },
+    {
+      "word": "SOFTWARE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 198,
+      "playabilityScore": 90
+    },
+    {
+      "word": "TRIANGLE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 195,
+      "playabilityScore": 90
+    },
+    {
+      "word": "HOSPITAL",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 176,
+      "playabilityScore": 90
+    },
+    {
+      "word": "OBSTACLE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 176,
+      "playabilityScore": 90
+    },
+    {
+      "word": "CUSTOMER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 170,
+      "playabilityScore": 90
+    },
+    {
+      "word": "SHOULDER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 150,
+      "playabilityScore": 90
+    },
+    {
+      "word": "MARKETING",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 234,
+      "playabilityScore": 89
+    },
+    {
+      "word": "OPERATES",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 219,
+      "playabilityScore": 89
+    },
+    {
+      "word": "REALISED",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 192,
+      "playabilityScore": 89
+    },
+    {
+      "word": "CHAMPIONS",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 185,
+      "playabilityScore": 89
+    },
+    {
+      "word": "DISCOVERY",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 163,
+      "playabilityScore": 89
+    },
+    {
+      "word": "PETROLEUM",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 141,
+      "playabilityScore": 89
+    },
+    {
+      "word": "PARADISE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 148,
+      "playabilityScore": 88
+    },
+    {
+      "word": "BACKGROUND",
+      "letters": 10,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 182,
+      "playabilityScore": 87
+    },
+    {
+      "word": "PLEASANT",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 168,
+      "playabilityScore": 87
+    },
+    {
+      "word": "SEARCHED",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 148,
+      "playabilityScore": 87
+    },
+    {
+      "word": "OPERATED",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 146,
+      "playabilityScore": 87
+    },
+    {
+      "word": "ESTABLISH",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 245,
+      "playabilityScore": 86
+    },
+    {
+      "word": "CUSTOMERS",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 243,
+      "playabilityScore": 86
+    },
+    {
+      "word": "LANDSCAPE",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 187,
+      "playabilityScore": 86
+    },
+    {
+      "word": "CONSUMERS",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 173,
+      "playabilityScore": 86
+    },
+    {
+      "word": "DESIGNER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 144,
+      "playabilityScore": 86
+    },
+    {
+      "word": "FAVOURITE",
+      "letters": 9,
+      "vowels": 5,
+      "difficulty": "Easy",
+      "validSubwords": 124,
+      "playabilityScore": 86
+    },
+    {
+      "word": "VERTICAL",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 133,
+      "playabilityScore": 85
+    },
+    {
+      "word": "IMPORTANT",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 144,
+      "playabilityScore": 84
+    },
+    {
+      "word": "LITERATURE",
+      "letters": 10,
+      "vowels": 5,
+      "difficulty": "Easy",
+      "validSubwords": 134,
+      "playabilityScore": 84
+    },
+    {
+      "word": "MODERATE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 134,
+      "playabilityScore": 84
+    },
+    {
+      "word": "THOUSAND",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 127,
+      "playabilityScore": 84
+    },
+    {
+      "word": "INCREDIBLE",
+      "letters": 10,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 126,
+      "playabilityScore": 84
+    },
+    {
+      "word": "EXPLAINED",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 123,
+      "playabilityScore": 84
+    },
+    {
+      "word": "PASSENGER",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 196,
+      "playabilityScore": 83
+    },
+    {
+      "word": "YESTERDAY",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 172,
+      "playabilityScore": 83
+    },
+    {
+      "word": "NEWSPAPER",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 169,
+      "playabilityScore": 83
+    },
+    {
+      "word": "TROPICAL",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 123,
+      "playabilityScore": 83
+    },
+    {
+      "word": "UNDERSTAND",
+      "letters": 10,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 274,
+      "playabilityScore": 82
+    },
+    {
+      "word": "DEPARTMENT",
+      "letters": 10,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 266,
+      "playabilityScore": 82
+    },
+    {
+      "word": "SCULPTURE",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 136,
+      "playabilityScore": 82
+    },
+    {
+      "word": "CONSUMER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 122,
+      "playabilityScore": 82
+    },
+    {
+      "word": "DEVELOPERS",
+      "letters": 10,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 241,
+      "playabilityScore": 81
+    },
+    {
+      "word": "MATERIAL",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 124,
+      "playabilityScore": 81
+    },
+    {
+      "word": "KEYBOARD",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 118,
+      "playabilityScore": 81
+    },
+    {
+      "word": "CHARACTERS",
+      "letters": 10,
+      "vowels": 3,
+      "difficulty": "Easy",
+      "validSubwords": 199,
+      "playabilityScore": 80
+    },
+    {
+      "word": "MEASURED",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Easy",
+      "validSubwords": 119,
+      "playabilityScore": 80
+    },
+    {
+      "word": "MISTAKES",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 119,
+      "playabilityScore": 79
+    },
+    {
+      "word": "RELATIVE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 114,
+      "playabilityScore": 79
+    },
+    {
+      "word": "VINEYARD",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 111,
+      "playabilityScore": 79
+    },
+    {
+      "word": "GRATEFUL",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 110,
+      "playabilityScore": 79
+    },
+    {
+      "word": "ROMANTIC",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 110,
+      "playabilityScore": 79
+    },
+    {
+      "word": "QUESTION",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 106,
+      "playabilityScore": 79
+    },
+    {
+      "word": "GENERATED",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 155,
+      "playabilityScore": 78
+    },
+    {
+      "word": "HAPPINESS",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 130,
+      "playabilityScore": 78
+    },
+    {
+      "word": "MENTIONS",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 117,
+      "playabilityScore": 78
+    },
+    {
+      "word": "LAUGHTER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 107,
+      "playabilityScore": 78
+    },
+    {
+      "word": "COMPUTER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 105,
+      "playabilityScore": 78
+    },
+    {
+      "word": "TEACHING",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 104,
+      "playabilityScore": 77
+    },
+    {
+      "word": "IMPROVED",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 104,
+      "playabilityScore": 77
+    },
+    {
+      "word": "DIFFERENT",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 124,
+      "playabilityScore": 76
+    },
+    {
+      "word": "PREVIOUS",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 96,
+      "playabilityScore": 76
+    },
+    {
+      "word": "INSPIRED",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 106,
+      "playabilityScore": 75
+    },
+    {
+      "word": "LANGUAGES",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 102,
+      "playabilityScore": 75
+    },
+    {
+      "word": "NARRATIVE",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 102,
+      "playabilityScore": 75
+    },
+    {
+      "word": "COLLECTION",
+      "letters": 10,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 97,
+      "playabilityScore": 74
+    },
+    {
+      "word": "HOLIDAYS",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 91,
+      "playabilityScore": 74
+    },
+    {
+      "word": "KNOWLEDGE",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 104,
+      "playabilityScore": 73
+    },
+    {
+      "word": "SITUATED",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 95,
+      "playabilityScore": 73
+    },
+    {
+      "word": "SUPERIOR",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 93,
+      "playabilityScore": 73
+    },
+    {
+      "word": "INTEREST",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 106,
+      "playabilityScore": 72
+    },
+    {
+      "word": "TREASURE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 101,
+      "playabilityScore": 72
+    },
+    {
+      "word": "CONDITIONS",
+      "letters": 10,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 90,
+      "playabilityScore": 72
+    },
+    {
+      "word": "HOUSEHOLD",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 90,
+      "playabilityScore": 72
+    },
+    {
+      "word": "SOLUTION",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 90,
+      "playabilityScore": 72
+    },
+    {
+      "word": "ELEPHANT",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 93,
+      "playabilityScore": 71
+    },
+    {
+      "word": "LEARNING",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 91,
+      "playabilityScore": 71
+    },
+    {
+      "word": "PRODUCER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 91,
+      "playabilityScore": 71
+    },
+    {
+      "word": "POLITICAL",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 89,
+      "playabilityScore": 71
+    },
+    {
+      "word": "UNIVERSE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 88,
+      "playabilityScore": 71
+    },
+    {
+      "word": "UMBRELLA",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 88,
+      "playabilityScore": 70
+    },
+    {
+      "word": "PATIENCE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 85,
+      "playabilityScore": 70
+    },
+    {
+      "word": "TRADITION",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 84,
+      "playabilityScore": 70
+    },
+    {
+      "word": "GRADUATE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 83,
+      "playabilityScore": 70
+    },
+    {
+      "word": "GARDENER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 97,
+      "playabilityScore": 69
+    },
+    {
+      "word": "WANDERER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 97,
+      "playabilityScore": 69
+    },
+    {
+      "word": "OPERATOR",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 91,
+      "playabilityScore": 69
+    },
+    {
+      "word": "RESPONSE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 91,
+      "playabilityScore": 68
+    },
+    {
+      "word": "SALARIES",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 88,
+      "playabilityScore": 68
+    },
+    {
+      "word": "SOMETIMES",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 85,
+      "playabilityScore": 68
+    },
+    {
+      "word": "NUMEROUS",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 77,
+      "playabilityScore": 68
+    },
+    {
+      "word": "CREATIVE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 75,
+      "playabilityScore": 68
+    },
+    {
+      "word": "REPUBLIC",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 70,
+      "playabilityScore": 68
+    },
+    {
+      "word": "EQUIPMENT",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 69,
+      "playabilityScore": 68
+    },
+    {
+      "word": "POWERFUL",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 69,
+      "playabilityScore": 68
+    },
+    {
+      "word": "SPEAKER",
+      "letters": 7,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 79,
+      "playabilityScore": 67
+    },
+    {
+      "word": "FURNITURE",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 73,
+      "playabilityScore": 67
+    },
+    {
+      "word": "CELEBRATE",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 106,
+      "playabilityScore": 66
+    },
+    {
+      "word": "SOMEWHERE",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 105,
+      "playabilityScore": 66
+    },
+    {
+      "word": "SOMEBODY",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 75,
+      "playabilityScore": 66
+    },
+    {
+      "word": "NEGATIVE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 69,
+      "playabilityScore": 66
+    },
+    {
+      "word": "ORIGINAL",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 64,
+      "playabilityScore": 65
+    },
+    {
+      "word": "POSITIVE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 64,
+      "playabilityScore": 65
+    },
+    {
+      "word": "DEVELOPER",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 99,
+      "playabilityScore": 64
+    },
+    {
+      "word": "WONDERED",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 77,
+      "playabilityScore": 64
+    },
+    {
+      "word": "OFFERING",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 67,
+      "playabilityScore": 64
+    },
+    {
+      "word": "DIFFERENCE",
+      "letters": 10,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 95,
+      "playabilityScore": 63
+    },
+    {
+      "word": "TEMPLATE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 74,
+      "playabilityScore": 63
+    },
+    {
+      "word": "OPERATE",
+      "letters": 7,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 72,
+      "playabilityScore": 63
+    },
+    {
+      "word": "RESOURCE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 68,
+      "playabilityScore": 63
+    },
+    {
+      "word": "SURPRISE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 71,
+      "playabilityScore": 62
+    },
+    {
+      "word": "RETURNED",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 69,
+      "playabilityScore": 62
+    },
+    {
+      "word": "SEASONAL",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 64,
+      "playabilityScore": 62
+    },
+    {
+      "word": "SCHEDULE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 59,
+      "playabilityScore": 62
+    },
+    {
+      "word": "COMPANION",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 56,
+      "playabilityScore": 62
+    },
+    {
+      "word": "PROPOSAL",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 67,
+      "playabilityScore": 61
+    },
+    {
+      "word": "VITAMINS",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 55,
+      "playabilityScore": 61
+    },
+    {
+      "word": "CHARACTER",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 76,
+      "playabilityScore": 60
+    },
+    {
+      "word": "TRAVELLER",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 76,
+      "playabilityScore": 60
+    },
+    {
+      "word": "ORDINARY",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Medium",
+      "validSubwords": 54,
+      "playabilityScore": 60
+    },
+    {
+      "word": "MOUNTAIN",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Medium",
+      "validSubwords": 49,
+      "playabilityScore": 60
+    },
+    {
+      "word": "EVERYBODY",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 65,
+      "playabilityScore": 59
+    },
+    {
+      "word": "FOLLOWING",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 64,
+      "playabilityScore": 59
+    },
+    {
+      "word": "MEANTIME",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 55,
+      "playabilityScore": 59
+    },
+    {
+      "word": "IDENTIFY",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 50,
+      "playabilityScore": 59
+    },
+    {
+      "word": "PEACEFUL",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 45,
+      "playabilityScore": 59
+    },
+    {
+      "word": "HARDWARE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 57,
+      "playabilityScore": 58
+    },
+    {
+      "word": "PORTRAIT",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 57,
+      "playabilityScore": 58
+    },
+    {
+      "word": "TOGETHER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 56,
+      "playabilityScore": 58
+    },
+    {
+      "word": "REMINDER",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 56,
+      "playabilityScore": 58
+    },
+    {
+      "word": "SERVICES",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 55,
+      "playabilityScore": 58
+    },
+    {
+      "word": "COMMUNITY",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 51,
+      "playabilityScore": 58
+    },
+    {
+      "word": "MUSICIAN",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 42,
+      "playabilityScore": 58
+    },
+    {
+      "word": "MAGAZINE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 40,
+      "playabilityScore": 58
+    },
+    {
+      "word": "VACATION",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 40,
+      "playabilityScore": 58
+    },
+    {
+      "word": "REGARDED",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 64,
+      "playabilityScore": 57
+    },
+    {
+      "word": "EDUCATED",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 47,
+      "playabilityScore": 57
+    },
+    {
+      "word": "FEEDBACK",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 42,
+      "playabilityScore": 57
+    },
+    {
+      "word": "PRESSURE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 60,
+      "playabilityScore": 56
+    },
+    {
+      "word": "TERRIBLE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 50,
+      "playabilityScore": 56
+    },
+    {
+      "word": "SENSIBLE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 49,
+      "playabilityScore": 56
+    },
+    {
+      "word": "LIFETIME",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 45,
+      "playabilityScore": 56
+    },
+    {
+      "word": "ENGINEERS",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 75,
+      "playabilityScore": 55
+    },
+    {
+      "word": "DISCUSSION",
+      "letters": 10,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 68,
+      "playabilityScore": 55
+    },
+    {
+      "word": "TRAINING",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 46,
+      "playabilityScore": 55
+    },
+    {
+      "word": "NATIONAL",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 42,
+      "playabilityScore": 55
+    },
+    {
+      "word": "EXPENSIVE",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 62,
+      "playabilityScore": 54
+    },
+    {
+      "word": "PAINTING",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 42,
+      "playabilityScore": 54
+    },
+    {
+      "word": "WILDLIFE",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 41,
+      "playabilityScore": 54
+    },
+    {
+      "word": "MEDICINE",
+      "letters": 8,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 38,
+      "playabilityScore": 54
+    },
+    {
+      "word": "CONDITION",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 36,
+      "playabilityScore": 54
+    },
+    {
+      "word": "SURVIVAL",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 31,
+      "playabilityScore": 54
+    },
+    {
+      "word": "MOVEMENT",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 38,
+      "playabilityScore": 53
+    },
+    {
+      "word": "FREQUENCY",
+      "letters": 9,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 33,
+      "playabilityScore": 53
+    },
+    {
+      "word": "RECORDED",
+      "letters": 8,
+      "vowels": 3,
+      "difficulty": "Hard",
+      "validSubwords": 44,
+      "playabilityScore": 52
+    },
+    {
+      "word": "THEREFORE",
+      "letters": 9,
+      "vowels": 4,
+      "difficulty": "Hard",
+      "validSubwords": 54,
+      "playabilityScore": 49
+    }
+  ]
+}
