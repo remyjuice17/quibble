@@ -771,7 +771,7 @@ export function GameProvider({
     if (!isHostRef.current) return;
     const now = Date.now();
     const w = generateBaseWord();
-    broadcastState({
+    const payload: StatePayload = {
       gameId: now, // new game
       status: "countdown",
       round: 1,
@@ -780,8 +780,15 @@ export function GameProvider({
       scrambled: scramble(w),
       endsAt: now + COUNTDOWN_SECONDS * 1000,
       sentAt: now,
-    });
-  }, [broadcastState]);
+    };
+    broadcastState(payload);
+    // Apply the score/claimed-words/review reset locally right away — the
+    // receive-side broadcast handler would eventually do this too, but only
+    // once its self-echo arrives, which isn't always reliable (the same gap
+    // that once made a player's own submitted word vanish). Whoever actually
+    // clicks Play Again shouldn't have to wait on that.
+    maybeResetForNewGame(payload);
+  }, [broadcastState, maybeResetForNewGame]);
 
   const playAgain = useCallback(() => {
     startGame();
@@ -790,7 +797,7 @@ export function GameProvider({
   const returnToLobby = useCallback(() => {
     if (!isHostRef.current) return;
     const now = Date.now();
-    broadcastState({
+    const payload: StatePayload = {
       gameId: now,
       status: "lobby",
       round: 0,
@@ -799,8 +806,10 @@ export function GameProvider({
       scrambled: [],
       endsAt: 0,
       sentAt: now,
-    });
-  }, [broadcastState]);
+    };
+    broadcastState(payload);
+    maybeResetForNewGame(payload);
+  }, [broadcastState, maybeResetForNewGame]);
 
   // End the game early (host). Finalizes the current round's Word Review, then
   // jumps everyone to the results screen; the winner is whoever leads on score.
