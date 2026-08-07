@@ -212,7 +212,28 @@ export function GameProvider({
     })(),
   );
 
-  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+  const messagesStorageKey = `quibble:messages:${roomCode}`;
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    try {
+      const raw = sessionStorage.getItem(messagesStorageKey);
+      return raw ? JSON.parse(raw) : initialMessages;
+    } catch {
+      return initialMessages;
+    }
+  });
+
+  // Keep chat persisted per room so a refresh doesn't blank the transcript.
+  // Messages only ever accumulate for a room's whole lifetime (cleared only
+  // on a genuine migration to a new room code, handled separately above), so
+  // there's no round-scoping concern here like there is for claimed words.
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(messagesStorageKey, JSON.stringify(messages));
+    } catch {
+      /* ignore */
+    }
+  }, [messages, messagesStorageKey]);
+
   const [players, setPlayers] = useState<RoomPlayer[]>([meRef.current]);
   const [isValidating, setIsValidating] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -563,6 +584,25 @@ export function GameProvider({
       claimedWordsRef.current = [...claimedWordsRef.current, claim];
       setClaimedWords((prev) => [...prev, claim]);
 
+      // Persist this round's claims + the dedup map + the aggregate (drives
+      // First/Longest badges) together, keyed to this exact game+round.
+      // Restored atomically below if this browser refreshes mid-round —
+      // otherwise a refresh would both lose the claimed-words panel AND risk
+      // re-awarding "First"/"Longest" to whoever claims next.
+      try {
+        sessionStorage.setItem(
+          `quibble:round:${roomCode}:${gameIdRef.current}:${p.round}`,
+          JSON.stringify({
+            claimedWords: claimedWordsRef.current,
+            claimedEntries: Array.from(claimedRef.current.entries()),
+            aggEntries:
+              agg.round === p.round ? Array.from(agg.byId.entries()) : [],
+          }),
+        );
+      } catch {
+        /* ignore */
+      }
+
       setMessages((prev) => [
         ...prev,
         {
@@ -806,11 +846,39 @@ export function GameProvider({
     const tag = `${state.gameId}:${state.round}`;
     if (state.status === "playing") {
       playedRef.current = new Set();
-      // Fresh, shared claimed-words list for the new round.
-      claimedRef.current = new Map();
       myPendingRef.current = new Set();
-      claimedWordsRef.current = [];
-      setClaimedWords([]);
+
+      // A refresh wipes this client's in-memory claimed-words/dedup state
+      // even mid-round — without this check, recovering the ongoing round
+      // (which the reconnect logic already does correctly) would still look
+      // like every word claimed so far had never happened. Restore the real
+      // snapshot for this exact round if this browser has already seen it;
+      // only a genuinely new round resets to empty.
+      let restored: {
+        claimedWords: ClaimedWord[];
+        claimedEntries: [string, { id: string; claimedAt: number }][];
+        aggEntries: [string, RoundAggEntry][];
+      } | null = null;
+      try {
+        const raw = sessionStorage.getItem(
+          `quibble:round:${roomCode}:${state.gameId}:${state.round}`,
+        );
+        restored = raw ? JSON.parse(raw) : null;
+      } catch {
+        restored = null;
+      }
+      if (restored) {
+        claimedRef.current = new Map(restored.claimedEntries);
+        claimedWordsRef.current = restored.claimedWords;
+        setClaimedWords(restored.claimedWords);
+        roundAggRef.current = restored.aggEntries.length
+          ? { round: state.round, byId: new Map(restored.aggEntries) }
+          : null;
+      } else {
+        claimedRef.current = new Map();
+        claimedWordsRef.current = [];
+        setClaimedWords([]);
+      }
       // Word Review: compute every possible word for this round once, off the
       // timer path, so the end-of-game review is instant.
       if (!reviewRef.current.has(state.round)) {
