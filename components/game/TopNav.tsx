@@ -97,6 +97,7 @@ export function TopNav() {
                 <button
                   type="button"
                   onClick={() => { setConfirmEnd(false); endGame(); }}
+                  data-testid="end-game-confirm"
                   className="rounded-md bg-danger px-2 py-1 text-xs font-bold text-white transition-transform active:scale-95"
                 >
                   End
@@ -113,6 +114,7 @@ export function TopNav() {
               <button
                 type="button"
                 onClick={() => setConfirmEnd(true)}
+                data-testid="end-game-button"
                 className="flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-danger/50 hover:text-danger"
                 aria-label="End game for everyone"
                 title="End game for everyone"

@@ -172,6 +172,7 @@ export function Results() {
                 type="button"
                 onClick={playAgain}
                 data-sfx="playAgain"
+                data-testid="play-again-button"
                 className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-semibold text-white shadow-glow transition-all hover:bg-accent-hover active:scale-[0.99]"
               >
                 <RotateCcw className="h-4 w-4" />

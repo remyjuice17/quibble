@@ -136,6 +136,7 @@ export function RoomFlow() {
         autoFocus
         autoComplete="off"
         maxLength={20}
+        data-testid="username-input"
         className="w-full rounded-xl border border-line bg-elevated px-4 py-3 text-sm text-foreground placeholder:text-subtle transition-colors focus:border-accent/50 focus:outline-none"
       />
     </div>
@@ -200,6 +201,7 @@ export function RoomFlow() {
           type="button"
           onClick={submitName}
           disabled={!username.trim()}
+          data-testid="submit-create"
           className="group mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-medium text-white shadow-subtle transition-all hover:bg-accent-hover active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-accent"
         >
           Create game

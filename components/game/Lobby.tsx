@@ -85,6 +85,7 @@ export function Lobby() {
           <button
             type="button"
             onClick={leaveRoom}
+            data-testid="leave-button"
             className="flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm text-muted transition-colors hover:border-line-strong hover:text-foreground"
           >
             <LogOut className="h-3.5 w-3.5" />
@@ -99,7 +100,10 @@ export function Lobby() {
           <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-subtle">
             Room code
           </p>
-          <p className="mt-2 font-mono text-4xl font-bold tracking-[0.3em] text-foreground sm:text-5xl">
+          <p
+            data-testid="room-code"
+            className="mt-2 font-mono text-4xl font-bold tracking-[0.3em] text-foreground sm:text-5xl"
+          >
             {roomCode}
           </p>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
@@ -194,6 +198,7 @@ export function Lobby() {
             type="button"
             onClick={toggleReady}
             data-sfx="ready"
+            data-testid="ready-button"
             className={`flex flex-1 items-center justify-center gap-2 rounded-xl border py-3 text-sm font-medium transition-all active:scale-[0.99] ${
               isReady
                 ? "border-success/40 bg-success/15 text-success"
@@ -209,6 +214,7 @@ export function Lobby() {
               type="button"
               onClick={startGame}
               data-sfx="startGame"
+              data-testid="start-game-button"
               className="group flex flex-[1.4] items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-semibold text-white shadow-glow transition-all hover:bg-accent-hover active:scale-[0.99]"
             >
               <Play className="h-4 w-4" fill="currentColor" />
