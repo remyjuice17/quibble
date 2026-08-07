@@ -61,23 +61,34 @@ export function isValidWord(word: string): boolean {
  * end-of-game Word Review. Computed once per round from the in-memory Set, so
  * it's a single linear pass — no per-word network or repeated work.
  */
-export function possibleWords(base: string): string[] {
-  if (!WORDS) return [];
+/**
+ * True if `word` can be spelled using only the letters available in `base`
+ * (each letter usable at most as many times as it appears in base). Shared by
+ * possibleWords() and the live submit-time check, so both apply the exact
+ * same rule.
+ */
+export function canFormFromLetters(word: string, base: string): boolean {
+  const w = word.trim().toLowerCase();
   const b = base.trim().toLowerCase();
   const need = new Uint8Array(26);
   const A = 97;
   for (let i = 0; i < b.length; i++) need[b.charCodeAt(i) - A]++;
+  const have = new Uint8Array(26);
+  for (let i = 0; i < w.length; i++) {
+    const c = w.charCodeAt(i) - A;
+    if (c < 0 || c > 25) return false;
+    if (++have[c] > need[c]) return false;
+  }
+  return true;
+}
+
+export function possibleWords(base: string): string[] {
+  if (!WORDS) return [];
+  const b = base.trim().toLowerCase();
   const out: string[] = [];
   WORDS.forEach((w) => {
     if (w.length < 3 || w.length > b.length) return;
-    let ok = true;
-    const have = new Uint8Array(26);
-    for (let i = 0; i < w.length; i++) {
-      const c = w.charCodeAt(i) - A;
-      if (c < 0 || c > 25) { ok = false; break; }
-      if (++have[c] > need[c]) { ok = false; break; }
-    }
-    if (ok) out.push(w);
+    if (canFormFromLetters(w, base)) out.push(w);
   });
   // Longest first, then alphabetical — reads well in the review.
   out.sort((x, y) => y.length - x.length || (x < y ? -1 : 1));

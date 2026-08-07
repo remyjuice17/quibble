@@ -23,6 +23,7 @@ export function Lobby() {
     players,
     meId,
     isHost,
+    hostId,
     isReady,
     readyCount,
     toggleReady,
@@ -63,11 +64,13 @@ export function Lobby() {
     }
   };
 
-  // Host first, then join order.
+  // Display order only (join order). Who actually holds the "Host" crown
+  // comes from the shared, debounced `hostId` above — not re-derived here —
+  // so a momentary presence blip can't make the crown flicker to someone
+  // else and back.
   const ordered = [...players].sort(
     (a, b) => a.joinedAt - b.joinedAt || a.id.localeCompare(b.id),
   );
-  const hostId = ordered[0]?.id;
 
   return (
     <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-background">

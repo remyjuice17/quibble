@@ -12,7 +12,7 @@ import {
 } from "react";
 import { initialMessages, type ChatMessage } from "@/lib/mockData";
 import { generateBaseWord, scramble } from "@/lib/words";
-import { loadDictionary, isValidWord, possibleWords } from "@/lib/dictionary";
+import { loadDictionary, isValidWord, possibleWords, canFormFromLetters } from "@/lib/dictionary";
 import {
   colorForName,
   initialsFor,
@@ -34,6 +34,16 @@ const INTERMISSION_SECONDS = 3;
 const COUNTDOWN_SECONDS = 4;
 const TOTAL_ROUNDS = 5;
 const HEARTBEAT_MS = 2000;
+// How long a (re)connecting client waits, with no local state, before it's
+// allowed to conclude nobody else has state to share and seed a fresh lobby.
+// Must comfortably exceed one heartbeat cycle plus real network round trips.
+const REJOIN_GRACE_MS = 3000;
+// A player who briefly drops out of presence (connection blip, tab hiccup)
+// shouldn't visibly hand the "Host" crown to someone else and back a moment
+// later — confusing for real users, even though nothing breaks either way.
+// Someone only stops counting toward host election after being genuinely
+// absent for this long.
+const HOST_GRACE_MS = 3000;
 
 export type { Status };
 export type SubmitResult =
@@ -86,6 +96,7 @@ type GameContextValue = {
   connected: boolean;
   multiplayer: boolean;
   isHost: boolean;
+  hostId: string | null;
   gameId: number;
   // status machine
   status: Status;
@@ -140,17 +151,22 @@ export function GameProvider({
   username,
   onLeave,
   rounds = TOTAL_ROUNDS,
+  justCreated = false,
   children,
 }: {
   roomCode: string;
   username: string;
   onLeave: () => void;
   rounds?: number;
+  justCreated?: boolean;
   children: ReactNode;
 }) {
   const multiplayer = isSupabaseConfigured();
   const roundsRef = useRef(rounds);
   roundsRef.current = rounds;
+  // Captured once; consumed (and cleared) on the very first successful
+  // subscribe so it can never bypass the safety wait on a later reconnect.
+  const justCreatedRef = useRef(justCreated);
 
   const meRef = useRef<RoomPlayer>({
     id: makeId(),
@@ -186,12 +202,27 @@ export function GameProvider({
 
   const channelRef = useRef<RoomChannel | null>(null);
   const subscribedRef = useRef(false);
+  // Timestamp of this client's most recent successful subscribe — used to
+  // give a (re)connecting client a grace window to hear the room's real
+  // current state before it's allowed to conclude "nobody has ever seeded
+  // this room" and start a fresh lobby. See REJOIN_GRACE_MS below.
+  const subscribedAtRef = useRef<number | null>(null);
   const applyWordRef = useRef<((p: WordPayload) => void) | null>(null);
   const stateRef = useRef<StatePayload | null>(null);
   const clockOffsetRef = useRef(0); // host_time - my_time
   const lastHeartbeatRef = useRef(0);
   const gameIdRef = useRef(0);
   const resetAppliedRef = useRef(-1);
+  // Wall-clock time we last actually received a "state" update (from anyone,
+  // including our own broadcasts). The host resends at least every
+  // HEARTBEAT_MS even with nothing new to say, so under normal conditions
+  // this should never go stale for long — if it does, something's wrong
+  // (most commonly: a mobile tab was backgrounded and its socket went quiet).
+  // Used to detect and recover from that without the player having to reload.
+  const lastStateReceivedAtRef = useRef(Date.now());
+  // Bumping this forces the connect effect below to tear down and recreate
+  // the channel — our one lever for "give up on this socket, reconnect".
+  const [reconnectTick, setReconnectTick] = useState(0);
   const playedRef = useRef<Set<string>>(new Set());
   const claimedRef = useRef<Map<string, { id: string; claimedAt: number }>>(
     new Map(),
@@ -202,14 +233,47 @@ export function GameProvider({
   const announcedStart = useRef<Set<string>>(new Set());
   const announcedEnd = useRef<Set<string>>(new Set());
 
-  // Host = earliest joiner (tie-break by id). Computed identically everywhere.
-  const host = useMemo(() => {
-    if (players.length === 0) return null;
-    return [...players].sort(
-      (a, b) => a.joinedAt - b.joinedAt || a.id.localeCompare(b.id),
-    )[0];
+  // Host election has a short memory (HOST_GRACE_MS): a player who's
+  // genuinely still present but momentarily missing from a presence snapshot
+  // keeps counting as "here" using their last-known record, so the crown
+  // doesn't visibly flip to someone else and back on every small blip. This
+  // is the SINGLE source of truth for who's host — exposed via context as
+  // `hostId` so every component (the lobby's crown badge, etc.) reads the
+  // same debounced answer instead of each re-deriving it independently.
+  const lastSeenRef = useRef<Map<string, { player: RoomPlayer; seenAt: number }>>(
+    new Map(),
+  );
+  useEffect(() => {
+    const now = Date.now();
+    for (const p of players) lastSeenRef.current.set(p.id, { player: p, seenAt: now });
   }, [players]);
-  const isHost = host?.id === meRef.current.id;
+
+  const [hostId, setHostId] = useState<string | null>(null);
+  useEffect(() => {
+    const recompute = () => {
+      const now = Date.now();
+      const presentIds = new Set(players.map((p) => p.id));
+      const electorate = [
+        ...players,
+        ...Array.from(lastSeenRef.current.values())
+          .filter(({ player, seenAt }) => !presentIds.has(player.id) && now - seenAt < HOST_GRACE_MS)
+          .map(({ player }) => player),
+      ];
+      if (electorate.length === 0) {
+        setHostId(null);
+        return;
+      }
+      const winner = [...electorate].sort(
+        (a, b) => a.joinedAt - b.joinedAt || a.id.localeCompare(b.id),
+      )[0];
+      setHostId(winner.id);
+    };
+    recompute();
+    const id = setInterval(recompute, 300);
+    return () => clearInterval(id);
+  }, [players]);
+
+  const isHost = hostId === meRef.current.id;
   const isHostRef = useRef(isHost);
   useEffect(() => {
     isHostRef.current = isHost;
@@ -242,6 +306,7 @@ export function GameProvider({
     clockOffsetRef.current = 0;
     setState(payload);
     lastHeartbeatRef.current = Date.now();
+    lastStateReceivedAtRef.current = Date.now();
     channelRef.current?.send({ type: "broadcast", event: "state", payload });
   }, []);
 
@@ -327,6 +392,7 @@ export function GameProvider({
       clockOffsetRef.current = payload.sentAt - Date.now();
       stateRef.current = payload;
       gameIdRef.current = payload.gameId;
+      lastStateReceivedAtRef.current = Date.now();
       setState(payload);
       maybeResetForNewGame(payload);
     });
@@ -429,6 +495,13 @@ export function GameProvider({
     channel.subscribe((sbStatus) => {
       if (sbStatus === "SUBSCRIBED") {
         subscribedRef.current = true;
+        // Consume the "I just created this room" signal exactly once — a
+        // genuinely brand-new room can seed immediately (nobody else could
+        // possibly be in it yet); any later reconnect within this same
+        // session goes through the normal grace window like everyone else.
+        const bypassGrace = justCreatedRef.current;
+        justCreatedRef.current = false;
+        subscribedAtRef.current = bypassGrace ? 0 : Date.now();
         setConnected(true);
         const taken = new Set(
           (Object.values(channel.presenceState()).flat() as RoomPlayer[])
@@ -442,13 +515,47 @@ export function GameProvider({
 
     return () => {
       subscribedRef.current = false;
+      subscribedAtRef.current = null;
       channel.untrack();
       const sb = getSupabase();
       if (sb) sb.removeChannel(channel as never);
       channelRef.current = null;
     };
+    // reconnectTick is intentionally a dependency: bumping it is how we force
+    // a full reconnect (see the visibility-regain effect below). Everything
+    // else this effect reads is either a ref or stable across the room's
+    // lifetime.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomCode]);
+  }, [roomCode, reconnectTick]);
+
+  // --- Recover from a backgrounded tab going quiet ---
+  // Mobile browsers routinely suspend a backgrounded tab's JS and let its
+  // WebSocket go idle; nothing about coming back to the tab guarantees the
+  // connection resumes on its own. Without this, a player who locks their
+  // phone or switches apps mid-game can come back to a frozen round with no
+  // way to recover except reloading. On regaining visibility we: (1) nudge —
+  // re-track presence, which (via the existing "presence join → host
+  // rebroadcasts" behavior above) is usually enough if the socket is still
+  // alive; (2) if nothing fresh arrives shortly after, assume the socket
+  // actually died and force a full reconnect.
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState !== "visible") return;
+      const sinceVisible = Date.now();
+      if (subscribedRef.current) channelRef.current?.track(meRef.current);
+      setTimeout(() => {
+        if (lastStateReceivedAtRef.current < sinceVisible) {
+          setReconnectTick((n) => n + 1);
+        }
+      }, 4000);
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onVisible);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onVisible);
+    };
+  }, []);
 
   // --- Host loop: only the host advances the status machine ---
   useEffect(() => {
@@ -457,8 +564,20 @@ export function GameProvider({
       const now = Date.now();
       const s = stateRef.current;
 
-      // No state yet → seed the lobby (the host is the first to arrive).
+      // No state yet → could be a genuinely brand-new room, OR this client
+      // just (re)connected to an ONGOING game and simply hasn't heard the
+      // current state yet (broadcasts aren't replayed to late subscribers).
+      // This loop ticks every 250ms — far faster than the round trip needed
+      // for another client to notice our presence "join" and re-broadcast
+      // the real state back to us. Self-seeding immediately here would race
+      // that round trip and can wipe an in-progress game for everyone the
+      // moment any player's connection blips. So: wait a grace period after
+      // subscribing — long enough to receive the existing game's state if
+      // there is one — before concluding this room has truly never been
+      // seeded and it's safe to start a fresh lobby ourselves.
       if (!s) {
+        const since = subscribedAtRef.current ?? now;
+        if (now - since < REJOIN_GRACE_MS) return;
         broadcastState({
           gameId: gameIdRef.current || now,
           status: "lobby",
@@ -749,6 +868,17 @@ export function GameProvider({
 
         const attempts = (meRef.current.wordsSubmitted ?? 0) + 1;
 
+        if (!canFormFromLetters(key, now.baseWord)) {
+          meRef.current = {
+            ...meRef.current,
+            wordsSubmitted: attempts,
+            combo: 0, // break the streak
+          };
+          track();
+          setCombo(0);
+          return { ok: false, error: "Those letters aren't in the word." };
+        }
+
         if (!isValidWord(key)) {
           meRef.current = {
             ...meRef.current,
@@ -833,6 +963,7 @@ export function GameProvider({
     connected,
     multiplayer,
     isHost,
+    hostId,
     gameId: state?.gameId ?? 0,
     status,
     round: state?.round ?? 0,

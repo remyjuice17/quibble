@@ -29,6 +29,12 @@ export function RoomFlow() {
     normalizeCode(params.get("code") ?? "") ? "name" : "code",
   );
   const createdCode = useRef(generateRoomCode());
+  // True only for the render immediately after THIS tab clicks "Create" —
+  // never persisted, so a page reload (which remounts RoomFlow fresh) always
+  // comes back false. Lets a genuinely brand-new room seed instantly, while
+  // every reconnect/rejoin still safely waits to hear any existing game state
+  // first (see REJOIN_GRACE_MS in GameContext).
+  const justCreatedRef = useRef(false);
   const [error, setError] = useState<string | null>(null);
 
   // Restore an in-progress session on refresh.
@@ -61,6 +67,7 @@ export function RoomFlow() {
         roomCode={session.code}
         username={session.username}
         rounds={session.rounds ?? 5}
+        justCreated={justCreatedRef.current}
         onLeave={leave}
       >
         <RoomRouter />
@@ -114,6 +121,7 @@ export function RoomFlow() {
     const name = username.trim().slice(0, 20);
     if (!name) return;
     if (mode === "create") {
+      justCreatedRef.current = true;
       enter({ code: createdCode.current, username: name, rounds });
     } else {
       const c = normalizeCode(code);
