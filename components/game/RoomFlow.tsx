@@ -53,10 +53,33 @@ export function RoomFlow() {
     setSession(s);
   };
 
+  // "Play Again" moves everyone to a brand-new room code. Reusing
+  // justCreatedRef here is deliberate and safe: for whichever client is
+  // actually host in the new room, it correctly skips the reconnect-safety
+  // wait (this genuinely is a fresh room nobody else could already be in);
+  // for every other client, it's simply never checked, since only the host
+  // ever consults it.
+  const migrate = (newCode: string) => {
+    setSession((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, code: newCode };
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(next));
+      return next;
+    });
+    justCreatedRef.current = true;
+  };
+
   const leave = () => {
     sessionStorage.removeItem(SESSION_KEY);
-    setSession(null);
-    router.push("/");
+    // A hard navigation, not router.push. Clearing session causes this
+    // component to immediately re-render its own "no session" fallback —
+    // the create/join chooser — still at this same /game URL, a moment
+    // before (or possibly instead of, if the soft navigation stalls or
+    // loses a race) the page actually changes. That fallback flash is very
+    // likely what "leave still shows the create room screen" actually is.
+    // A hard reload sidesteps the whole category of timing/caching
+    // subtlety: there's no intermediate view for anything to race against.
+    window.location.href = "/";
   };
 
   if (!hydrated) return <div className="h-[100dvh] bg-background" />;
@@ -69,6 +92,7 @@ export function RoomFlow() {
         rounds={session.rounds ?? 5}
         justCreated={justCreatedRef.current}
         onLeave={leave}
+        onMigrate={migrate}
       >
         <RoomRouter />
       </GameProvider>
