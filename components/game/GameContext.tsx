@@ -23,6 +23,7 @@ import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { AVATAR_COUNT, pickAvatar } from "@/lib/avatars";
 import {
   createRoomChannel,
+  generateRoomCode,
   type RoomChannel,
   type StatePayload,
   type Status,
@@ -150,6 +151,7 @@ export function GameProvider({
   roomCode,
   username,
   onLeave,
+  onMigrate,
   rounds = TOTAL_ROUNDS,
   justCreated = false,
   children,
@@ -157,6 +159,7 @@ export function GameProvider({
   roomCode: string;
   username: string;
   onLeave: () => void;
+  onMigrate?: (newCode: string) => void;
   rounds?: number;
   justCreated?: boolean;
   children: ReactNode;
@@ -351,7 +354,51 @@ export function GameProvider({
   }, []);
 
   // --- Connect: presence + broadcast subscriptions ---
+  const prevRoomCodeRef = useRef<string | null>(null);
+
   useEffect(() => {
+    // A genuine migration (Play Again's new room code) vs. just a forced
+    // reconnect to the SAME room (reconnectTick bumped, roomCode unchanged).
+    // Refs like meRef persist across re-renders regardless of prop changes,
+    // so without this, a "brand new room" would silently carry over the
+    // previous room's score, chat, and claimed words.
+    if (prevRoomCodeRef.current !== null && prevRoomCodeRef.current !== roomCode) {
+      // justCreatedRef only seeds from the `justCreated` prop on this
+      // component's very first mount (that's what useRef does). Since a
+      // migration reuses this same GameProvider instance — only the
+      // roomCode prop changes, not a remount — it needs re-arming here from
+      // the CURRENT prop value, or a migrated host would incorrectly still
+      // go through the reconnect-safety wait for a room that's genuinely,
+      // certainly brand new.
+      justCreatedRef.current = justCreated;
+      meRef.current = {
+        ...meRef.current,
+        score: 0,
+        wordsSubmitted: 0,
+        wordsValid: 0,
+        longestWord: "",
+        combo: 0,
+        bestCombo: 0,
+        ready: false,
+      };
+      stateRef.current = null;
+      setState(null);
+      setMessages([]);
+      setClaimedWords([]);
+      claimedWordsRef.current = [];
+      reviewRef.current = new Map();
+      setGameReview([]);
+      setRoundAwards(null);
+      setMyGameAwards({ mvps: 0, awards: 0 });
+      myGameAwardsRef.current = { mvps: 0, awards: 0 };
+      claimedRef.current = new Map();
+      myPendingRef.current = new Set();
+      roundAggRef.current = null;
+      resetAppliedRef.current = -1;
+      setCombo(0);
+    }
+    prevRoomCodeRef.current = roomCode;
+
     const supabase = getSupabase();
     const channel = createRoomChannel(supabase, roomCode, meRef.current.id);
     channelRef.current = channel;
@@ -395,6 +442,17 @@ export function GameProvider({
       lastStateReceivedAtRef.current = Date.now();
       setState(payload);
       maybeResetForNewGame(payload);
+    });
+
+    // "Play Again" moves everyone to a brand-new room code rather than
+    // replaying the same one. The host broadcasts the new code once; every
+    // other client follows via this listener. The host itself doesn't wait
+    // for its own echo — see migrateRoom() below, same reasoning as the
+    // score-reset fix: don't depend on self-echo for something the person
+    // who triggered it needs applied immediately.
+    channel.on("broadcast", { event: "migrate" }, (msg) => {
+      const payload = msg.payload as { newCode: string };
+      onMigrate?.(payload.newCode);
     });
 
     const applyWord = (p: WordPayload) => {
@@ -555,6 +613,32 @@ export function GameProvider({
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("focus", onVisible);
     };
+  }, []);
+
+  // Recover from a connection that's gone silently stale even without the
+  // tab ever leaving focus. A socket can stop actually delivering messages
+  // — no formal disconnect, no visibilitychange event, just... nothing
+  // arriving — from a network-level stall or hiccup that has nothing to do
+  // with backgrounding. Confirmed this can happen for real: a load test
+  // showed simulated players go quiet mid-session with zero errors reported,
+  // and a real host separately stopped receiving other players' words and
+  // score updates mid-game, tab open the whole time. The heartbeat means
+  // fresh state should arrive at least every HEARTBEAT_MS under normal
+  // conditions; if nothing has arrived in far longer than that, something's
+  // wrong and waiting passively for a visibility change that may never come
+  // isn't good enough — force a reconnect.
+  useEffect(() => {
+    const STALE_MS = 8000; // ~4x HEARTBEAT_MS — comfortable margin over jitter
+    const id = setInterval(() => {
+      if (!subscribedRef.current) return;
+      if (Date.now() - lastStateReceivedAtRef.current > STALE_MS) {
+        setReconnectTick((n) => n + 1);
+        // Give the new connection a fresh window before checking again,
+        // rather than immediately re-triggering while it's still connecting.
+        lastStateReceivedAtRef.current = Date.now();
+      }
+    }, 4000);
+    return () => clearInterval(id);
   }, []);
 
   // --- Host loop: only the host advances the status machine ---
@@ -790,9 +874,21 @@ export function GameProvider({
     maybeResetForNewGame(payload);
   }, [broadcastState, maybeResetForNewGame]);
 
+  // "Play Again" now starts a genuinely fresh room — new code, everyone
+  // moved over — rather than replaying the same one. Broadcasting first
+  // means other clients follow via the "migrate" listener above; calling
+  // onMigrate directly afterward means the host (who triggered this) moves
+  // immediately too, not dependent on their own broadcast echoing back.
   const playAgain = useCallback(() => {
-    startGame();
-  }, [startGame]);
+    if (!isHostRef.current) return;
+    const newCode = generateRoomCode();
+    channelRef.current?.send({
+      type: "broadcast",
+      event: "migrate",
+      payload: { newCode },
+    });
+    onMigrate?.(newCode);
+  }, [onMigrate]);
 
   const returnToLobby = useCallback(() => {
     if (!isHostRef.current) return;
