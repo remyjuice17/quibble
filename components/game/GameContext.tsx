@@ -35,6 +35,18 @@ const INTERMISSION_SECONDS = 3;
 const COUNTDOWN_SECONDS = 4;
 const TOTAL_ROUNDS = 5;
 const HEARTBEAT_MS = 2000;
+// The "countdown" status (the round-start reveal modal) only lasts
+// COUNTDOWN_SECONDS — much shorter than most other statuses. A connection
+// hiccup that the normal HEARTBEAT_MS cadence would recover from easily in a
+// 60-second "playing" round can, in this narrow window, mean a player misses
+// the reveal ENTIRELY: by the time the general staleness watchdog (STALE_MS,
+// tuned deliberately slower to avoid false positives) notices anything's
+// wrong, the round has already moved into "playing" and the modal is simply
+// gone for that round — even though the player recovers fine afterward and
+// never even realizes what they missed. Re-broadcasting much more densely
+// during just this one short window gives a straggler several chances to
+// catch up before it closes, instead of relying on 1-2 normal heartbeats.
+const COUNTDOWN_HEARTBEAT_MS = 800;
 // How long a (re)connecting client waits, with no local state, before it's
 // allowed to conclude nobody else has state to share and seed a fresh lobby.
 // Must comfortably exceed one heartbeat cycle plus real network round trips.
@@ -819,8 +831,12 @@ export function GameProvider({
             sentAt: now,
           });
         }
-      } else if (now - lastHeartbeatRef.current > HEARTBEAT_MS) {
-        broadcastState({ ...s, sentAt: now });
+      } else {
+        const heartbeatInterval =
+          s.status === "countdown" ? COUNTDOWN_HEARTBEAT_MS : HEARTBEAT_MS;
+        if (now - lastHeartbeatRef.current > heartbeatInterval) {
+          broadcastState({ ...s, sentAt: now });
+        }
       }
     }, 250);
     return () => clearInterval(id);
