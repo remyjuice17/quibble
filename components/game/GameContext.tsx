@@ -45,6 +45,12 @@ const REJOIN_GRACE_MS = 3000;
 // Someone only stops counting toward host election after being genuinely
 // absent for this long.
 const HOST_GRACE_MS = 3000;
+// A connection can go silently stale — still technically "connected", just
+// not actually receiving anything — with no formal error and no tab-
+// visibility change involved. If nothing real has arrived in this long
+// (comfortably more than one HEARTBEAT_MS cycle), something's wrong; see
+// the staleness watchdog below.
+const STALE_MS = 8000;
 
 export type { Status };
 export type SubmitResult =
@@ -171,20 +177,40 @@ export function GameProvider({
   // subscribe so it can never bypass the safety wait on a later reconnect.
   const justCreatedRef = useRef(justCreated);
 
-  const meRef = useRef<RoomPlayer>({
-    id: makeId(),
-    name: username,
-    color: colorForName(username),
-    avatar: Math.floor(Math.random() * AVATAR_COUNT),
-    score: 0,
-    joinedAt: Date.now(),
-    ready: false,
-    wordsSubmitted: 0,
-    wordsValid: 0,
-    longestWord: "",
-    combo: 0,
-    bestCombo: 0,
-  });
+  // A hard refresh discards all in-memory state, including this player's own
+  // identity — without this, a refresh mid-game looks to the room like the
+  // old player vanished and a brand-new one (same name, 0 score) joined.
+  // sessionStorage survives a refresh in the same tab, so if this browser has
+  // already been a player in THIS specific room, resume as that same player
+  // (same id — the actual presence key — and their real score) instead of
+  // generating a fresh identity. Scoped by roomCode so it can never leak
+  // into a different room, including one reached via Play Again's migration.
+  const playerStorageKey = `quibble:player:${roomCode}`;
+  const meRef = useRef<RoomPlayer>(
+    (() => {
+      let saved: Partial<RoomPlayer> | null = null;
+      try {
+        const raw = sessionStorage.getItem(playerStorageKey);
+        saved = raw ? JSON.parse(raw) : null;
+      } catch {
+        saved = null;
+      }
+      return {
+        id: saved?.id ?? makeId(),
+        name: username,
+        color: colorForName(username),
+        avatar: saved?.avatar ?? Math.floor(Math.random() * AVATAR_COUNT),
+        score: saved?.score ?? 0,
+        joinedAt: saved?.joinedAt ?? Date.now(),
+        ready: false,
+        wordsSubmitted: saved?.wordsSubmitted ?? 0,
+        wordsValid: saved?.wordsValid ?? 0,
+        longestWord: saved?.longestWord ?? "",
+        combo: saved?.combo ?? 0,
+        bestCombo: saved?.bestCombo ?? 0,
+      };
+    })(),
+  );
 
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [players, setPlayers] = useState<RoomPlayer[]>([meRef.current]);
@@ -299,7 +325,12 @@ export function GameProvider({
 
   const track = useCallback(() => {
     channelRef.current?.track(meRef.current);
-  }, []);
+    try {
+      sessionStorage.setItem(playerStorageKey, JSON.stringify(meRef.current));
+    } catch {
+      /* ignore */
+    }
+  }, [playerStorageKey]);
 
   const broadcastState = useCallback((payload: StatePayload) => {
     // Optimistic local apply prevents the host re-firing a transition before
@@ -398,6 +429,12 @@ export function GameProvider({
       setCombo(0);
     }
     prevRoomCodeRef.current = roomCode;
+
+    if (reconnectTick > 0) {
+      console.log(
+        `[quibble] Reconnecting channel for room ${roomCode} (attempt ${reconnectTick})…`,
+      );
+    }
 
     const supabase = getSupabase();
     const channel = createRoomChannel(supabase, roomCode, meRef.current.id);
@@ -628,10 +665,14 @@ export function GameProvider({
   // wrong and waiting passively for a visibility change that may never come
   // isn't good enough — force a reconnect.
   useEffect(() => {
-    const STALE_MS = 8000; // ~4x HEARTBEAT_MS — comfortable margin over jitter
     const id = setInterval(() => {
       if (!subscribedRef.current) return;
       if (Date.now() - lastStateReceivedAtRef.current > STALE_MS) {
+        console.log(
+          "[quibble] Staleness watchdog fired — no data received in " +
+            STALE_MS +
+            "ms. Forcing a reconnect.",
+        );
         setReconnectTick((n) => n + 1);
         // Give the new connection a fresh window before checking again,
         // rather than immediately re-triggering while it's still connecting.
@@ -639,6 +680,32 @@ export function GameProvider({
       }
     }, 4000);
     return () => clearInterval(id);
+  }, []);
+
+  // TEST HOOK — deliberately trigger the exact scenario above, on demand,
+  // instead of waiting for a real network hiccup to happen naturally. This
+  // doesn't touch the actual message-handling code at all; it just ages the
+  // same timestamp the watchdog reads, so the watchdog's real, unmodified
+  // check genuinely believes it's been silent too long — a faithful test of
+  // the real recovery path, not a separate simulation of it.
+  //
+  // From the browser console: __quibbleSimulateStale()
+  // Expect within ~4s: a "[quibble] Staleness watchdog fired..." log, a
+  // brief reconnect, and the game catching back up to the real current
+  // state (round/leaderboard/chat) if anything was actually missed meanwhile.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const w = window as unknown as { __quibbleSimulateStale?: () => void };
+    w.__quibbleSimulateStale = () => {
+      lastStateReceivedAtRef.current = Date.now() - (STALE_MS + 1000);
+      console.log(
+        "[quibble] Simulated a silent stall (socket stays open, nothing else changes). " +
+          "Watching for the watchdog to fire within ~4s...",
+      );
+    };
+    return () => {
+      delete w.__quibbleSimulateStale;
+    };
   }, []);
 
   // --- Host loop: only the host advances the status machine ---
