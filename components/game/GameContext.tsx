@@ -358,6 +358,19 @@ export function GameProvider({
 
   const track = useCallback(() => {
     channelRef.current?.track(meRef.current);
+    // Optimistic local update — same principle as applying my own word
+    // before its broadcast echoes back. `players` (what the leaderboard
+    // renders) is otherwise ONLY updated by a Supabase presence "sync"
+    // event round-tripping back from the server; without this, my own
+    // score visibly lags on my own screen for however long that round trip
+    // takes, even though meRef.current (and everyone else's view of me,
+    // once their sync arrives) is already correct. When the real sync
+    // does land, it just confirms what's already showing.
+    setPlayers((prev) => {
+      const meId = meRef.current.id;
+      if (!prev.some((p) => p.id === meId)) return [...prev, meRef.current];
+      return prev.map((p) => (p.id === meId ? meRef.current : p));
+    });
     try {
       sessionStorage.setItem(playerStorageKey, JSON.stringify(meRef.current));
     } catch {
