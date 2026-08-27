@@ -5,8 +5,6 @@ import { Shuffle } from "lucide-react";
 import { useGame } from "./GameContext";
 import { useAudio } from "@/components/audio/AudioProvider";
 
-const STEP = 46; // 40px tile (h-10 w-10) + 6px gap
-
 /**
  * Shows the round's letters with a Shuffle button. Shuffling is purely LOCAL
  * and cosmetic: it reorders how *this* player sees the letters (to spark new
@@ -22,6 +20,18 @@ export function ShuffleWord() {
   useEffect(() => {
     setOrder(scrambled.map((_, i) => i));
   }, [scrambled, round]);
+
+  // Tiles are the thing you're actively trying to solve — sized to fit the
+  // real viewport rather than relying purely on the horizontal-scroll
+  // fallback (still present as a safety net) so longer words don't need
+  // swiping sideways just to be seen in full on a phone.
+  const [viewportW, setViewportW] = useState(390);
+  useEffect(() => {
+    const update = () => setViewportW(window.innerWidth);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   if (scrambled.length === 0) return null;
 
@@ -42,19 +52,30 @@ export function ShuffleWord() {
     sfx("shuffle");
   };
 
-  const width = scrambled.length * STEP - 6;
+  const n = scrambled.length;
+  // Reserve room for the shuffle button + its gap, and the stage's own
+  // horizontal padding, so the budget reflects what's actually left for tiles.
+  const budget = Math.min(460, viewportW - 32 - 48 - 16);
+  const gap = n > 8 ? 6 : 8;
+  const tileSize = Math.max(18, Math.min(48, Math.floor((budget - gap * (n - 1)) / n)));
+  const fontSize = Math.round(tileSize * 0.5);
+  const step = tileSize + gap;
+  const width = n * step - gap;
 
   return (
     <div className="flex items-center gap-2">
-      <div className="relative h-10" style={{ width }}>
+      <div className="relative" style={{ width, height: tileSize }}>
         {scrambled.map((letter, i) => {
           const pos = order.indexOf(i);
           return (
             <span
               key={i}
-              className="tile absolute top-0 flex h-10 w-10 items-center justify-center text-xl"
+              className="tile absolute top-0 flex items-center justify-center"
               style={{
-                transform: `translateX(${(pos < 0 ? i : pos) * STEP}px)`,
+                width: tileSize,
+                height: tileSize,
+                fontSize,
+                transform: `translateX(${(pos < 0 ? i : pos) * step}px)`,
                 transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
               }}
             >

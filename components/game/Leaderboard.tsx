@@ -10,6 +10,11 @@ export function Leaderboard() {
   const { players, meId } = useGame();
   const ranked = [...players].sort((a, b) => b.score - a.score);
 
+  const TOP_N = 6;
+  const visible = ranked.slice(0, TOP_N);
+  const myRank = ranked.findIndex((p) => p.id === meId) + 1; // 0 if somehow not found
+  const me = myRank > TOP_N ? ranked[myRank - 1] : null;
+
   // Transient feedback: floating "+N" + row flash on score increases, and a
   // brief "Now Leading" indicator when the top spot changes.
   const [pulse, setPulse] = useState<Record<string, { delta: number; n: number }>>({});
@@ -62,8 +67,8 @@ export function Leaderboard() {
       </div>
 
       <div className="flex-1 overflow-y-auto p-3">
-        <div className="relative" style={{ height: ranked.length * 60 }}>
-          {ranked.map((player: RoomPlayer, i) => {
+        <div className="relative" style={{ height: visible.length * 60 }}>
+          {visible.map((player: RoomPlayer, i) => {
             const rank = i + 1;
             const isYou = player.id === meId;
             const leader = rank === 1 && player.score > 0;
@@ -130,6 +135,26 @@ export function Leaderboard() {
             );
           })}
         </div>
+
+        {/* Pinned below the top 6 if you're not in it — so you're never just
+            gone with no feedback at all, without cluttering the main ranked
+            list with everyone. */}
+        {me && (
+          <div className="mt-2 flex items-center gap-3 rounded-2xl border-[1.5px] border-accent bg-accent-soft px-3 py-3">
+            <span className="w-4 text-center font-mono text-[15px] font-extrabold text-subtle">
+              {myRank}
+            </span>
+            <AvatarArt index={me.avatar} size={38} />
+            <div className="min-w-0 flex-1">
+              <span className="truncate text-sm font-bold text-foreground">
+                {me.name} (you)
+              </span>
+            </div>
+            <span className="font-mono text-[15px] font-extrabold tabular-nums text-foreground">
+              {me.score.toLocaleString()}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="border-t border-line px-5 py-3">
